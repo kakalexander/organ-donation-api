@@ -1,10 +1,8 @@
 version: '3.8'
 
 networks:
-  banco:
-    name: banco
   web:
-    name: web
+    driver: bridge
 
 services:
   db:
@@ -21,28 +19,28 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     networks:
-      - banco
+      - web
     ports:
       - "3306:3306"
 
   redis:
     image: redis:alpine
-    container_name: "laravel_redis"
     restart: always
     networks:
-      - banco
+      - web
 
-  react:
+  frontend:
     build:
-      context: ../organ-donation-web # Ajusta o caminho para a pasta externa
+      context: ../organ-donation-web
       dockerfile: Dockerfile
-    container_name: "react_frontend"
+    tty: true
     ports:
       - "3000:3000"
     volumes:
-      - ../organ-donation-web:/app # Ajusta o volume para refletir a estrutura externa
+      - ../organ-donation-web:/app:cached
     working_dir: /app
-    command: ["npm", "start"]
+    depends_on:
+      - api
     networks:
       - web
 
@@ -61,17 +59,10 @@ services:
       DB_DATABASE: laravel
       DB_USERNAME: user
       DB_PASSWORD: password
-      CACHE_DRIVER: redis
-      SESSION_DRIVER: redis
-      QUEUE_CONNECTION: redis
-      APP_ENV: local
-      APP_DEBUG: true
-      APP_KEY: base64:/dFfGgRrG6InaZo+2y3ifa6fCSvQ5efd8fbcGaQA40o=
     depends_on:
       - db
       - redis
     networks:
-      - banco
       - web
     ports:
       - "8000:8000"
@@ -79,24 +70,8 @@ services:
       sh -c "
       php artisan config:cache &&
       php artisan migrate:fresh --seed &&
-      php-fpm
+      php artisan serve --host=0.0.0.0 --port=8000
       "
-
-  nginx:
-    build: 
-      context: ./docker/nginx
-      dockerfile: Dockerfile
-    container_name: "laravel_nginx"
-    restart: always
-    volumes:
-      - .:/var/www
-      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - api
-    networks: 
-      - web
-    ports:
-      - "80:80"
 
 volumes:
   db_data:

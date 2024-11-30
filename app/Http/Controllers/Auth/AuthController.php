@@ -3,51 +3,60 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Illuminate\Http\Request; // Certifique-se de importar corretamente
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    /**
+     * Register a new user.
+     */
     public function register(Request $request)
     {
-        // Valida apenas os campos que o usuário deve fornecer
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users|max:255',
             'password' => 'required|string|min:8',
-            'blood_type' => 'required|string|in:A+,A-,B+,B-,AB+,AB-,O+,O-,NAO SEI',
+            'blood_type' => 'required|string|in:A+,A-,B+,B-,AB+,AB-,O+,O-,NÃO SEI',
+            'birth_date' => 'required|date', // Valida a data de nascimento
         ]);
-    
-        $defaultPerfilId = 2;
-    
-        // Cria o usuário com o perfil padrão
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
-            'id_perfil' => $defaultPerfilId,
-            'blood_type' => $validated['blood_type'], 
+            'blood_type' => $validated['blood_type'],
+            'birth_date' => $validated['birth_date'], 
+            'id_perfil' => 2, 
         ]);
-    
-        // Retorna a mensagem de sucesso junto com os dados do usuário
+
         return response()->json([
             'message' => 'Usuário cadastrado com sucesso!',
-            'user' => $user
+            'user' => $user,
         ], 201);
     }
-    
 
-    public function login(Request $request)
+    /**
+     * Login a user and return a token.
+     */
+    public function login(LoginRequest $request)
     {
-        $credentials = $request->only('email', 'password');
+        // Verificar credenciais e autenticar
+        $request->authenticate();
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = base64_encode($user->id . now()->timestamp); // Token simples
-            return response()->json(['token' => $token, 'user' => $user], 200);
-        }
+        $user = Auth::user();
 
-        return response()->json(['error' => 'Unauthorized'], 401);
+        // Gerar um token simples (ou JWT se necessário)
+        $token = base64_encode($user->id . now()->timestamp);
+
+        return response()->json([
+            'message' => 'Login bem-sucedido!',
+            'token' => $token,
+            'user' => $user,
+        ]);
     }
 }

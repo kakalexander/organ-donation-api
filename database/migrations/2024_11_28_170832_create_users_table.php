@@ -14,16 +14,19 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->date('birth_date')->nullable(); // Removido o AFTER
             $table->string('email')->unique();
             $table->string('password');
             $table->unsignedBigInteger('id_endereco')->nullable();
             $table->unsignedBigInteger('id_perfil')->default(1);
+            $table->enum('tipo_cadastro', ['doador', 'receptor', 'admin'])->default('receptor');
+            $table->enum('blood_type', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'NÃO SEI'])->nullable();
+            $table->timestamp('last_login')->nullable();
             $table->timestamps();
-        
+
             $table->foreign('id_endereco')->references('id')->on('enderecos')->onDelete('set null');
             $table->foreign('id_perfil')->references('id')->on('perfis');
         });
-        
     }
 
     /**
