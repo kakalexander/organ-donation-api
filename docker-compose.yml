@@ -29,20 +29,20 @@ services:
     networks:
       - web
 
-  frontend:
-    build:
-      context: ../organ-donation-web
-      dockerfile: Dockerfile
-    tty: true
-    ports:
-      - "3000:3000"
-    volumes:
-      - ../organ-donation-web:/app:cached
-    working_dir: /app
-    depends_on:
-      - api
-    networks:
-      - web
+  # frontend:
+  #   build:
+  #     context: ../organ-donation-web
+  #     dockerfile: Dockerfile
+  #   tty: true
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ../organ-donation-web:/app:cached
+  #   working_dir: /app
+  #   depends_on:
+  #     - api
+  #   networks:
+  #     - web
 
   api:
     build: 

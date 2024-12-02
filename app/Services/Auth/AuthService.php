@@ -1,40 +1,50 @@
 <?php
 
-namespace App\Services\Auth ;
+namespace App\Services\Auth;
 
 use App\Models\User;
+use App\Models\UserToken;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AuthService
 {
+    /**
+     * Register a new user.
+     */
     public function register(array $data): User
     {
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => Hash::make($data['password']),
+            'blood_type' => $data['blood_type'] ?? null,
+            'birth_date' => $data['birth_date'] ?? null,
+            'id_perfil' => $data['id_perfil'] ?? 2, // Default: Receptor
         ]);
     }
 
-    public function login(array $credentials): ?string
+    /**
+     * Login user and generate token.
+     */
+    public function login(array $credentials): string
     {
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-
-            $token = Str::uuid()->toString();
-
-            DB::table('user_tokens')->insert([
-                'user_id' => $user->id,
-                'token' => $token,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            return $token;
+        if (!Auth::attempt($credentials)) {
+            throw new \Exception('Credenciais inválidas.', 401);
         }
 
-        return null;
+        $user = Auth::user();
+
+        // Generate a unique token
+        $token = Str::uuid()->toString();
+
+        // Save or update the token for the user
+        UserToken::updateOrCreate(
+            ['user_id' => $user->id],
+            ['token' => $token]
+        );
+
+        return $token;
     }
 }

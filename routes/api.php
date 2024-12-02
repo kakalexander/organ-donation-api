@@ -8,41 +8,40 @@ use App\Http\Controllers\SolicitationController;
 use App\Http\Controllers\DashboardController;
 
 // Rotas públicas de autenticação
-// Rotas públicas
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Rota protegida para atualizar o último login
-Route::middleware('auth:sanctum')->group(function () {
+// Rotas Protegidas (Token Middleware)
+Route::middleware(['App\Http\Middleware\CheckUserToken'])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'getDashboardData']);
+
+    // Rota de exemplo para validar usuários
+    Route::get('/user', function () {
+        return response()->json(['message' => 'Access granted']);
+    });
+
+    // Atualizar último login
     Route::post('/update-last-login', function (\Illuminate\Http\Request $request) {
-        $user = $request->user(); // Obtem o usuário autenticado
+        $user = $request->user();
         if (!$user) {
             return response()->json(['message' => 'Usuário não autenticado'], 401);
         }
         $user->update(['last_login' => now()]);
         return response()->json(['message' => 'Last login updated']);
     });
-    Route::get('/dashboard', [DashboardController::class, 'getDashboardData']);
 });
 
-
-// Rota para cadastrar hospitais
+// Rotas para Hospitais
 Route::apiResource('hospitals', HospitalController::class);
 
-// Cadastrar órgãos
+// Rotas para Órgãos
 Route::apiResource('orgaos', OrgaoController::class);
 
-// Não pode ser editavel (não possui PUT OU PATCH) solicitações de orgãos
+// Rotas para Solicitações de Órgãos
 Route::prefix('solicitations')->group(function () {
     Route::get('/', [SolicitationController::class, 'index']);
     Route::get('/{id}', [SolicitationController::class, 'show']);
     Route::post('/', [SolicitationController::class, 'store']);
     Route::delete('/{id}', [SolicitationController::class, 'destroy']);
-});
-
-// Rotas protegidas
-Route::middleware('App\Http\Middleware\CheckUserToken')->group(function () {
-    Route::get('/user', function () {
-        return response()->json(['message' => 'Access granted']);
-    });
 });
