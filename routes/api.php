@@ -16,11 +16,15 @@ Route::middleware(['App\Http\Middleware\CheckUserToken'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'getDashboardData']);
 
-    // Rota de exemplo para validar usuários
-    Route::get('/user', function () {
-        return response()->json(['message' => 'Access granted']);
+Route::middleware(['App\Http\Middleware\CheckUserToken'])->group(function () {
+     Route::get('/user', function (\Illuminate\Http\Request $request) {
+        $user = $request->user(); // Obtém o usuário autenticado
+        if (!$user) {
+            return response()->json(['message' => 'Usuário não autenticado'], 401);
+        }
+        return response()->json($user); // Retorna os detalhes do usuário
     });
-
+    
     // Atualizar último login
     Route::post('/update-last-login', function (\Illuminate\Http\Request $request) {
         $user = $request->user();
@@ -28,15 +32,19 @@ Route::middleware(['App\Http\Middleware\CheckUserToken'])->group(function () {
             return response()->json(['message' => 'Usuário não autenticado'], 401);
         }
         $user->update(['last_login' => now()]);
-        return response()->json(['message' => 'Last login updated']);
+            return response()->json(['message' => 'Last login updated']);
+        });
     });
 });
+    
 
 // Rotas para Hospitais
 Route::apiResource('hospitals', HospitalController::class);
 
 // Rotas para Órgãos
-Route::apiResource('orgaos', OrgaoController::class);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('orgaos', OrgaoController::class);
+});
 
 // Rotas para Solicitações de Órgãos
 Route::prefix('solicitations')->group(function () {

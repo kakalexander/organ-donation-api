@@ -19,7 +19,7 @@ class OrgaoController extends Controller
         $orgaos = $this->orgaoRepository->getAll();
         return response()->json($orgaos);
     }
-
+    
     public function show($id)
     {
         $orgao = $this->orgaoRepository->getById($id);
