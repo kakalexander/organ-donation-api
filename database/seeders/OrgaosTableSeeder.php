@@ -4,40 +4,28 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class OrgaosTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        DB::table('orgaos')->insert([
-            [
-                'nome' => 'Coração',
-                'descricao' => 'Órgão responsável por bombear o sangue pelo corpo.',
-                'tipo' => 'Vital',
-            ],
-            [
-                'nome' => 'Pulmões',
-                'descricao' => 'Órgãos responsáveis pela troca de gases no organismo.',
-                'tipo' => 'Vital',
-            ],
-            [
-                'nome' => 'Fígado',
-                'descricao' => 'Órgão responsável pelo metabolismo e detoxificação.',
-                'tipo' => 'Vital',
-            ],
-            [
-                'nome' => 'Rins',
-                'descricao' => 'Órgãos que filtram o sangue e produzem urina.',
-                'tipo' => 'Vital',
-            ],
-            [
-                'nome' => 'Estômago',
-                'descricao' => 'Órgão do sistema digestivo responsável pela digestão inicial dos alimentos.',
-                'tipo' => 'Digestivo',
-            ],
+        // Criar usuários fictícios (doadores)
+        $userIds = DB::table('users')->insertGetId([
+            ['name' => 'João Silva', 'email' => 'joao@example.com', 'password' => bcrypt('password'), 'blood_type' => 'O+', 'tipo_cadastro' => 'doador', 'created_at' => now()],
+            ['name' => 'Maria Oliveira', 'email' => 'maria@example.com', 'password' => bcrypt('password'), 'blood_type' => 'A-', 'tipo_cadastro' => 'doador', 'created_at' => now()],
+        ]);
+
+        // Criar órgãos
+        $orgaoIds = DB::table('orgaos')->insertGetId([
+            ['nome' => 'Coração', 'descricao' => 'Órgão vital', 'tipo' => 'Vital', 'tipo_sanguineo' => 'O+', 'sexo' => 'M', 'created_at' => now()],
+            ['nome' => 'Pulmões', 'descricao' => 'Órgão vital', 'tipo' => 'Vital', 'tipo_sanguineo' => 'A-', 'sexo' => 'F', 'created_at' => now()],
+        ]);
+
+        // Vincular órgãos aos usuários na tabela pivot
+        DB::table('usuarios_orgaos')->insert([
+            ['id_user' => $userIds[0], 'id_orgao' => $orgaoIds[0], 'tipo' => 'Doador', 'created_at' => now()],
+            ['id_user' => $userIds[1], 'id_orgao' => $orgaoIds[1], 'tipo' => 'Doador', 'created_at' => now()],
         ]);
     }
 }

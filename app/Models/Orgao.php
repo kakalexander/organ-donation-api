@@ -16,4 +16,11 @@ class Orgao extends Model
         'tipo_sanguineo',
         'sexo',
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'usuarios_orgaos', 'id_orgao', 'id_user')
+                    ->withPivot('tipo') // Tipo do vínculo (doador/receptor)
+                    ->withTimestamps();
+    }
 }
