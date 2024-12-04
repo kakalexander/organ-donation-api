@@ -16,5 +16,7 @@ class DatabaseSeeder extends Seeder
 
         // Chama o seeder de usuários (inclui o administrador)
         $this->call(UserSeeder::class);
+
+        $this->call(OrgaosTableSeeder::class);
     }
 }

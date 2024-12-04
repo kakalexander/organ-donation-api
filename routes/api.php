@@ -15,6 +15,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware(['App\Http\Middleware\CheckUserToken'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'getDashboardData']);
+    Route::post('/orgaos', [OrgaoController::class, 'store']);
 
 Route::middleware(['App\Http\Middleware\CheckUserToken'])->group(function () {
      Route::get('/user', function (\Illuminate\Http\Request $request) {
@@ -41,10 +42,6 @@ Route::middleware(['App\Http\Middleware\CheckUserToken'])->group(function () {
 // Rotas para Hospitais
 Route::apiResource('hospitals', HospitalController::class);
 
-// Rotas para Órgãos
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('orgaos', OrgaoController::class);
-});
 
 // Rotas para Solicitações de Órgãos
 Route::prefix('solicitations')->group(function () {

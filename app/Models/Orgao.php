@@ -10,17 +10,12 @@ class Orgao extends Model
     use HasFactory;
 
     protected $fillable = [
+        'nome_doador',
         'nome',
         'descricao',
         'tipo',
-        'tipo_sanguineo',
+        'blood_type',
         'sexo',
     ];
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'usuarios_orgaos', 'id_orgao', 'id_user')
-                    ->withPivot('tipo') // Tipo do vínculo (doador/receptor)
-                    ->withTimestamps();
-    }
 }
+

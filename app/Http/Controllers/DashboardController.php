@@ -74,11 +74,10 @@ class DashboardController extends Controller
             'total' => Orgao::count(),
             'ultimas_24h' => Orgao::where('created_at', '>=', now()->subDay())->count(),
             'ultimos_7_dias' => Orgao::where('created_at', '>=', now()->subDays(7))->count(),
-            'detalhes' => Orgao::with(['users' => function ($query) {
-                $query->select('users.id', 'name', 'blood_type', 'tipo_cadastro'); // Campos necessários dos doadores
-            }])->latest()->take(10)->get(['id', 'nome', 'tipo', 'tipo_sanguineo', 'sexo', 'created_at']),
+            'detalhes' => Orgao::latest()->take(10)->get(['id', 'nome_doador', 'nome', 'tipo', 'blood_type', 'sexo', 'created_at']),
         ];
     }
+    
     
     
 

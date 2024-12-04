@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('orgaos', function (Blueprint $table) {
             $table->id();
+            $table->string('nome_doador');
             $table->string('nome');
-            $table->string('descricao');
-            $table->enum('tipo', [ 'Vital', 'Não Vital'])->nullable();
-            $table->string('tipo_sanguineo')->nullable(); 
-            $table->enum('sexo', ['M', 'F', 'Outro'])->nullable(); 
+            $table->string('descricao')->nullable();
+            $table->enum('tipo', ['Vital', 'Não Vital']);
+            $table->string('blood_type');
+            $table->enum('sexo', ['M', 'F', 'Outro']);
             $table->timestamps();
         });
+        
     }
 
     /**
