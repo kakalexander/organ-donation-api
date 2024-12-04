@@ -15,7 +15,7 @@ class OrgaoFactory extends Factory
             'nome' => $this->faker->word(), // Nome fictício para o órgão
             'descricao' => $this->faker->sentence(), // Uma breve descrição
             'tipo' => $this->faker->randomElement(['Vital', 'Não Vital']), // Tipo do órgão
-            'tipo_sanguineo' => $this->faker->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', null]), // Tipo sanguíneo
+            'blood_type' => $this->faker->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', null]), // Tipo sanguíneo
             'sexo' => $this->faker->randomElement(['M', 'F', 'Outro', null]), // Sexo
         ];
     }

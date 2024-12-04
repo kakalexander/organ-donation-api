@@ -2,30 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|string|min:8|confirmed',
-        'address_id' => 'required|exists:addresses,id',
-        'profile_id' => 'required|exists:profiles,id',
-    ]);
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'birth_date' => 'required|date',
+            'password' => 'required|string|min:8|confirmed',
+            'tipo_cadastro' => 'required|in:doador,receptor,admin',
+            'blood_type' => 'nullable|in:A+,A-,B+,B-,AB+,AB-,O+,O-,NÃO SEI',
+        ]);
 
-    $user = User::create([
-        'name' => $validated['name'],
-        'email' => $validated['email'],
-        'password' => bcrypt($validated['password']),
-        'address_id' => $validated['address_id'],
-        'profile_id' => $validated['profile_id'],
-    ]);
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'birth_date' => $validated['birth_date'],
+            'password' => Hash::make($validated['password']),
+            'tipo_cadastro' => $validated['tipo_cadastro'],
+            'blood_type' => $validated['blood_type'],
+        ]);
 
-    return response()->json($user, 201);
-}
-
+        return response()->json(['message' => 'Usuário cadastrado com sucesso!', 'user' => $user], 201);
+    }
 }

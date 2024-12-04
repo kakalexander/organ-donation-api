@@ -21,7 +21,6 @@ return new class extends Migration
             $table->enum('sexo', ['M', 'F', 'Outro']);
             $table->timestamps();
         });
-        
     }
 
     /**

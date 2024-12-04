@@ -13,7 +13,7 @@ class Solicitation extends Model
         'orgao_id',
         'user_id',
         'prazo',
-        'tipo_sanguineo',
+        'blood_type',
         'mensagem',
     ];
 

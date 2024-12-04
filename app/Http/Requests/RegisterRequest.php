@@ -24,6 +24,7 @@ class RegisterRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users', 'max:255'],
             'password' => ['required', 'string', 'min:8'],
             'blood_type' => ['nullable', 'string', 'in:A+,A-,B+,B-,AB+,AB-,O+,O-,NAO SEI'],
+            'tipo_cadastro' => ['required', 'in:doador,receptor,admin'], // Valida o tipo de cadastro
         ];
     }
 }

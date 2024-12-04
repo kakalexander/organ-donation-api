@@ -17,7 +17,7 @@ class SolicitationFactory extends Factory
             'orgao_id' => Orgao::factory(),
             'user_id' => User::factory(),
             'prazo' => $this->faker->numberBetween(1, 30) . ' dias', 
-            'tipo_sanguineo' => $this->faker->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'NÃO SEI']),
+            'blood_type' => $this->faker->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'NÃO SEI']),
             'mensagem' => $this->faker->text(500),
         ];
     }

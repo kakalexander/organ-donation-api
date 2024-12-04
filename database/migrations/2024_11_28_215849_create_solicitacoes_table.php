@@ -12,8 +12,9 @@ class CreateSolicitacoesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('orgao_id');
             $table->unsignedBigInteger('user_id');
+            $table->string('nome');
             $table->string('prazo');
-            $table->string('tipo_sanguineo');
+            $table->string('blood_type');
             $table->string('mensagem', 500)->nullable();
             $table->timestamps();
 
@@ -25,6 +26,6 @@ class CreateSolicitacoesTable extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('solicitacoes');
+        Schema::dropIfExists('solicitations');
     }
 }

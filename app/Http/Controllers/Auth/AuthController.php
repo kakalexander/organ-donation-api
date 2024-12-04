@@ -23,8 +23,16 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         try {
-            $user = $this->authService->register($request->validated());
-
+            $validatedData = $request->validated();
+            $user = $this->authService->register([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => $validatedData['password'],
+                'blood_type' => $validatedData['blood_type'],
+                'birth_date' => $validatedData['birth_date'] ?? null,
+                'tipo_cadastro' => $validatedData['tipo_cadastro'], 
+            ]);
+    
             return response()->json([
                 'message' => 'Usuário cadastrado com sucesso!',
                 'user' => $user,
@@ -36,7 +44,7 @@ class AuthController extends Controller
             ], 400);
         }
     }
-
+    
     /**
      * Login a user and return a token.
      */

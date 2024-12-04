@@ -2,50 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\SolicitationRepositoryInterface;
 use Illuminate\Http\Request;
+use App\Models\Solicitation;
 
 class SolicitationController extends Controller
 {
-    protected $repository;
-
-    public function __construct(SolicitationRepositoryInterface $repository)
-    {
-        $this->repository = $repository;
-    }
-
-    public function index()
-    {
-        return response()->json($this->repository->getAll(), 200);
-    }
-
-    public function show($id)
-    {
-        return response()->json($this->repository->getById($id), 200);
-    }
-
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'orgao_id' => 'required|exists:orgaos,id',
-            'user_id' => 'required|exists:users,id',
-            'prazo' => ['required', 'string', 'regex:/^\d+ dias$/'],
-            'tipo_sanguineo' => 'required|in:A+,A-,B+,B-,AB+,AB-,O+,O-, NÃO SEI',
-            'mensagem' => 'nullable|string|max:500',
+        $validated = $request->validate([
+            'nome' => 'required|string|max:255',
+            'prazo' => 'required|string|max:255',
+            'mensagem' => 'required|string|max:500',
         ]);
 
-        $solicitacao = $this->repository->create($data);
+        $solicitation = Solicitation::create([
+            'nome' => $validated['nome'],
+            'prazo' => $validated['prazo'],
+            'mensagem' => $validated['mensagem'],
+            'user_id' => $request->user()->id, // Relacionar ao usuário autenticado
+        ]);
 
         return response()->json([
             'message' => 'Solicitação criada com sucesso!',
-            'solicitacao' => $solicitacao,
+            'solicitation' => $solicitation,
         ], 201);
     }
 
-    public function destroy($id)
+    public function index(Request $request)
     {
-        $this->repository->delete($id);
+        $solicitations = Solicitation::where('user_id', $request->user()->id)->get();
 
-        return response()->json(['message' => 'Solicitação excluída com sucesso!'], 200);
+        return response()->json($solicitations);
     }
 }

@@ -21,7 +21,7 @@ class AuthService
             'password' => Hash::make($data['password']),
             'blood_type' => $data['blood_type'] ?? null,
             'birth_date' => $data['birth_date'] ?? null,
-            'id_perfil' => $data['id_perfil'] ?? 2, // Default: Receptor
+            'tipo_cadastro' => $data['tipo_cadastro'], 
         ]);
     }
 
