@@ -10,16 +10,18 @@ class CreateSolicitacoesTable extends Migration
     {
         Schema::create('solicitations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('orgao_id');
             $table->unsignedBigInteger('user_id');
             $table->string('nome');
             $table->string('prazo');
             $table->string('blood_type');
             $table->string('mensagem', 500)->nullable();
+            $table->string('sexo');
+            $table->string('telefone');
+            $table->string('endereco');
+            $table->string('status')->default('pendente');
             $table->timestamps();
 
             // Chaves estrangeiras
-            $table->foreign('orgao_id')->references('id')->on('orgaos')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

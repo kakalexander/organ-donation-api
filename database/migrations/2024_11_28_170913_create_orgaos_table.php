@@ -13,13 +13,17 @@ return new class extends Migration
     {
         Schema::create('orgaos', function (Blueprint $table) {
             $table->id();
-            $table->string('nome_doador');
+            $table->unsignedBigInteger('user_id');
+            $table->string('nome_doador')->nullable(); 
             $table->string('nome');
             $table->string('descricao')->nullable();
             $table->enum('tipo', ['Vital', 'Não Vital']);
             $table->string('blood_type');
             $table->enum('sexo', ['M', 'F', 'Outro']);
             $table->timestamps();
+
+            // Configurar a chave estrangeira
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

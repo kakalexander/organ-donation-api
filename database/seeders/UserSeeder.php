@@ -24,6 +24,24 @@ class UserSeeder extends Seeder
             'blood_type' => null,
         ]);
 
+        $admin = User::create([
+            'name' => 'Receptor',
+            'email' => 'receptor@example.com',
+            'password' => bcrypt('admin123'),
+            'id_perfil' => 1, // Administrador
+            'tipo_cadastro' => 'receptor',
+            'blood_type' => null,
+        ]);
+
+        $admin = User::create([
+            'name' => 'Doador',
+            'email' => 'doador@example.com',
+            'password' => bcrypt('admin123'),
+            'id_perfil' => 1, // Administrador
+            'tipo_cadastro' => 'doador',
+            'blood_type' => null,
+        ]);
+
         // Gerar um token para o administrador
         DB::table('user_tokens')->insert([
             'user_id' => $admin->id,

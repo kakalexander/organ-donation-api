@@ -11,6 +11,7 @@ class OrgaosTableSeeder extends Seeder
     {
         DB::table('orgaos')->insert([
             [
+                'user_id' => 1, 
                 'nome_doador' => 'João Silva',
                 'nome' => 'Coração',
                 'descricao' => 'Órgão vital',
@@ -21,6 +22,7 @@ class OrgaosTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'user_id' => 2, 
                 'nome_doador' => 'Maria Oliveira',
                 'nome' => 'Pulmões',
                 'descricao' => 'Órgão vital',

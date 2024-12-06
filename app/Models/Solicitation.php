@@ -10,27 +10,14 @@ class Solicitation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'orgao_id',
         'user_id',
+        'nome',
         'prazo',
         'blood_type',
         'mensagem',
+        'sexo',
+        'telefone',
+        'endereco',
+        'status',
     ];
-
-    /**
-     * Relacionamento com o modelo Orgão.
-     */
-    public function orgao()
-    {
-        return $this->belongsTo(Orgao::class);
-    }
-
-    /**
-     * Relacionamento com o modelo User.
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }
-

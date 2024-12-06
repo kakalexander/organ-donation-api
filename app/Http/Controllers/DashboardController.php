@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Orgao;
+use App\Models\Organ;
 
 class DashboardController extends Controller
 {
@@ -71,10 +71,13 @@ class DashboardController extends Controller
     private function getOrgaoData()
     {
         return [
-            'total' => Orgao::count(),
-            'ultimas_24h' => Orgao::where('created_at', '>=', now()->subDay())->count(),
-            'ultimos_7_dias' => Orgao::where('created_at', '>=', now()->subDays(7))->count(),
-            'detalhes' => Orgao::latest()->take(10)->get(['id', 'nome_doador', 'nome', 'tipo', 'blood_type', 'sexo', 'created_at']),
+            'total' => Organ::count(),
+            'ultimas_24h' => Organ::where('created_at', '>=', now()->subDay())->count(),
+            'ultimos_7_dias' => Organ::where('created_at', '>=', now()->subDays(7))->count(),
+            'detalhes' => Organ::with('user:id,name,blood_type') 
+                ->latest()
+                ->take(10)
+                ->get(['id', 'nome', 'tipo', 'blood_type', 'sexo', 'created_at', 'user_id']),
         ];
     }
     
@@ -89,9 +92,9 @@ class DashboardController extends Controller
         return [
             'total' => User::count(),
             'ativos_24h' => User::where('last_login', '>=', now()->subDay())->count(),
-            'ultimo_doador' => User::where('tipo_cadastro', 'doador')->latest()->first(),
-            'ultimo_receptor' => User::where('tipo_cadastro', 'receptor')->latest()->first(),
-            'ultimo_online' => User::latest('last_login')->first(),
+            'ultimo_doador' => User::where('tipo_cadastro', 'doador')->latest()->first(['id', 'name', 'email', 'created_at']),
+            'ultimo_receptor' => User::where('tipo_cadastro', 'receptor')->latest()->first(['id', 'name', 'email', 'created_at']),
+            'ultimo_online' => User::latest('last_login')->first(['id', 'name', 'last_login']),
         ];
     }
 

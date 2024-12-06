@@ -3,20 +3,20 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HospitalController;
-use App\Http\Controllers\OrgaoController;
+use App\Http\Controllers\OrganController;
 use App\Http\Controllers\SolicitationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 
 // Rotas públicas de autenticação
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']); // Cadastro
+Route::post('/login', [AuthController::class, 'login']); // Login
 
 // Rotas protegidas (Token Middleware)
 Route::middleware(['App\Http\Middleware\CheckUserToken'])->group(function () {
     // Rotas do usuário autenticado
-    Route::get('/dashboard', [DashboardController::class, 'getDashboardData']);
-
+    Route::get('/dashboard', [DashboardController::class, 'getDashboardData']); // Dados do dashboard
+ 
     Route::get('/user', function (\Illuminate\Http\Request $request) {
         $user = $request->user();
         if (!$user) {
@@ -35,31 +35,25 @@ Route::middleware(['App\Http\Middleware\CheckUserToken'])->group(function () {
         return response()->json(['message' => 'Último login atualizado']);
     });
 
-    // Rotas específicas para doadores
-    Route::prefix('doador')->group(function () {
-        Route::post('/orgaos', [OrgaoController::class, 'store']); // Cadastrar órgão
-        Route::get('/orgaos', [OrgaoController::class, 'index']); // Listar órgãos doados pelo usuário
-    });
+    Route::middleware(['App\Http\Middleware\CheckUserToken'])->group(function () {
+        Route::prefix('doador')->group(function () {
+            Route::get('/orgaos', [OrganController::class, 'index']); // Listar órgãos doados pelo usuário
+            Route::post('/orgaos', [OrganController::class, 'store']); // Novo método para usuários
+        });
+    
+        Route::prefix('admin')->group(function () {
+            Route::get('/orgaos', [OrganController::class, 'listAll']); // Admin lista todos os órgãos
+            Route::post('/orgaos', [OrganController::class, 'store']); // Admin cadastra órgãos
+            Route::post('/users', [UserController::class, 'store']); // Admin cadastra usuários
+        });
 
-    Route::prefix('receptor')->group(function () {
-        Route::post('/solicitacoes', [SolicitationController::class, 'store']); // Criar solicitação
-        Route::get('/solicitacoes', [SolicitationController::class, 'index']); // Listar solicitações do usuário
-    });
-
-    // Rotas específicas para administradores
-    Route::prefix('admin')->group(function () {
-        Route::get('/orgaos', [OrgaoController::class, 'listAll']); // Listar todos os órgãos
-        Route::post('/usuarios', [UserController::class, 'store']); // Criar usuário
+        Route::prefix('receptor')->group(function () {
+            Route::get('/solicitations', [SolicitationController::class, 'index']); // Listar solicitações do usuário
+            Route::post('/solicitations', [SolicitationController::class, 'store']); // Nova solicitação
+        });
     });
 
     // Rotas para hospitais
-    Route::apiResource('hospitals', HospitalController::class);
+    Route::apiResource('hospitals', HospitalController::class); // CRUD de hospitais
 
-    // Rotas para solicitações de órgãos
-    // Route::prefix('solicitations')->group(function () {
-    //     Route::get('/', [SolicitationController::class, 'index']);
-    //     Route::get('/{id}', [SolicitationController::class, 'show']);
-    //     Route::post('/', [SolicitationController::class, 'store']);
-    //     Route::delete('/{id}', [SolicitationController::class, 'destroy']);
-    // });
 });
