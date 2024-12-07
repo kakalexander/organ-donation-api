@@ -7,60 +7,192 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <h1>Documentação do Backend - API de Doação de Órgãos</h1>
+  
+  <h2>Contextualização</h2>
+  <p>
+    O projeto de <strong>Doação de Órgãos</strong> tem como objetivo sensibilizar e conscientizar a sociedade
+    sobre a importância da doação de órgãos, além de criar uma plataforma tecnológica que facilite o processo.
+    Implementado com <strong>Laravel</strong> e <strong>Docker</strong>, o backend fornece APIs seguras para gerenciar doadores, 
+    receptores e órgãos cadastrados, além de oferecer funcionalidades específicas para administradores.
+  </p>
+  
+  <h2>Tecnologias Utilizadas</h2>
+  <ul>
+    <li>PHP 8.x com Laravel</li>
+    <li>MySQL como banco de dados</li>
+    <li>Redis para cache e filas</li>
+    <li>Docker e Docker Compose para containerização</li>
+    <li>TailwindCSS para estilos simples</li>
+  </ul>
+  
+  <h2>Estrutura do Projeto</h2>
+  <pre>
+app/
+  ├── Http/
+  │   ├── Controllers/
+  │   ├── Middleware/
+  │   └── Requests/
+  ├── Interfaces/
+  ├── Models/
+  ├── Providers/
+  ├── Repositories/
+  ├── Services/
+bootstrap/
+config/
+database/
+  ├── factories/
+  ├── migrations/
+  └── seeders/
+routes/
+  ├── api.php
+  └── web.php
+tests/
+docker/
+  ├── Dockerfile
+  └── docker-compose.yml
+.env.example
+  </pre>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+  <h3>Pastas Principais</h3>
+  <ul>
+    <li><strong>Http</strong>: Contém controladores e middlewares para gerenciar as rotas.</li>
+    <li><strong>Models</strong>: Modelos do Eloquent para interagir com o banco de dados.</li>
+    <li><strong>Repositories</strong>: Implementa a camada de acesso a dados, seguindo o princípio de separação de responsabilidades.</li>
+    <li><strong>Services</strong>: Lógica de negócios complexa.</li>
+    <li><strong>Routes</strong>:
+      <ul>
+        <li><strong>api.php</strong>: Define as rotas da API.</li>
+        <li><strong>web.php</strong>: Rotas web (não utilizadas diretamente no projeto).</li>
+      </ul>
+    </li>
+  </ul>
+  
+  <h2>Configuração e Execução Local</h2>
+  <h3>Pré-requisitos</h3>
+  <ul>
+    <li>Docker e Docker Compose</li>
+    <li>Composer instalado na máquina local</li>
+  </ul>
+  
+  <h3>Passos</h3>
+  <ol>
+    <li><strong>Clone o repositório</strong>:
+      <pre><code>git clone &lt;url-do-repositorio&gt;
+cd organ-donation-api
+      </code></pre>
+    </li>
+    <li><strong>Configure o arquivo .env</strong>:
+      <pre><code>APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=base64:/dFfGgRrG6InaZo+2y3ifa6fCSvQ5efd8fbcGaQA40o=
+APP_DEBUG=true
+APP_TIMEZONE=UTC
+APP_URL=http://localhost:8000
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+APP_LOCALE=en
+APP_FALLBACK_LOCALE=en
+APP_FAKER_LOCALE=en_US
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+APP_MAINTENANCE_DRIVER=file
+# APP_MAINTENANCE_STORE=database
 
-## Learning Laravel
+PHP_CLI_SERVER_WORKERS=4
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+BCRYPT_ROUNDS=12
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+LOG_CHANNEL=stack
+LOG_STACK=single
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=error
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=user
+DB_PASSWORD=password
 
-## Laravel Sponsors
+SESSION_DRIVER=redis
+SESSION_LIFETIME=120
+SESSION_ENCRYPT=false
+SESSION_PATH=/
+SESSION_DOMAIN=null
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+BROADCAST_CONNECTION=log
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=redis
 
-### Premium Partners
+CACHE_STORE=database
+CACHE_PREFIX=
+CACHE_DRIVER=redis
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+MEMCACHED_HOST=127.0.0.1
 
-## Contributing
+REDIS_CLIENT=phpredis
+REDIS_HOST=redis
+REDIS_PASSWORD=null
+REDIS_PORT=6379
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+MAIL_MAILER=log
+MAIL_HOST=127.0.0.1
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
 
-## Code of Conduct
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=
+AWS_USE_PATH_STYLE_ENDPOINT=false
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+VITE_APP_NAME="${APP_NAME}"
+</code></pre>
+    </li>
+    <li><strong>Instale as dependências</strong>:
+      <pre><code>composer install</code></pre>
+    </li>
+    <li><strong>Suba os containers</strong>:
+      <pre><code>docker-compose up -d</code></pre>
+    </li>
+    <li><strong>Acesse o projeto</strong>:
+      <p>API: <a href="http://localhost:8000/api" target="_blank">http://localhost:8000/api</a></p>
+      <p>FRONTEND: <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></p>
+    </li>
+  </ol>
+  <h2>Caso queira você pode usar os usuarios padrões do sistema</h2>
+    <ul>
+        <li><strong>email: admin@example.com  senha: admin123</li>
+        <li><strong>email: doador@example.com  senha: admin123</li>
+        <li><strong>email: receptor@example.com  senha: admin123</li>
+    </ul>
+  <h2>Rotas Principais</h2>
+  <h3>Autenticação</h3>
+  <ul>
+    <li><strong>POST /register</strong>: Registro de novos usuários.</li>
+    <li><strong>POST /login</strong>: Login com autenticação via token.</li>
+  </ul>
 
-## Security Vulnerabilities
+  <h3>Rotas de Doador</h3>
+  <ul>
+    <li><strong>GET /doador/orgaos</strong>: Lista órgãos cadastrados pelo doador.</li>
+    <li><strong>POST /doador/orgaos</strong>: Cadastro de novos órgãos.</li>
+  </ul>
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+  <h3>Rotas de Administrador</h3>
+  <ul>
+    <li><strong>GET /admin/orgaos</strong>: Lista todos os órgãos doados.</li>
+    <li><strong>POST /admin/orgaos</strong>: Cadastra um órgão (modo administrador).</li>
+  </ul>
+</body>
+</html>
