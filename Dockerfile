@@ -39,5 +39,10 @@ RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 # Expor a porta 9000
 EXPOSE 9000
 
-# Iniciar o servidor PHP-FPM
-CMD ["php-fpm"]
+# Executar migrações e rodar o servidor Laravel
+CMD sh -c " \
+    composer install && \
+    php artisan config:cache && \
+    php artisan migrate:fresh --seed && \
+    php artisan serve --host=0.0.0.0 --port=8000 \
+"
