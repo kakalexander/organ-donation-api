@@ -90,19 +90,22 @@ cd organ-donation-api
       </code></pre>
     </li>
     <li><strong>Configure o arquivo .env</strong>:
-      <pre><code>APP_NAME=Laravel
+      <pre><code>
+APP_NAME=Laravel
 APP_ENV=local
-APP_KEY=base64:/dFfGgRrG6InaZo+2y3ifa6fCSvQ5efd8fbcGaQA40o=
+APP_KEY=base64:QqdHGGcmaPPPbA3QIP8qCb8IhtAPhIUF0DtF8q2yre8=
 APP_DEBUG=true
-APP_TIMEZONE=UTC
+APP_TIMEZONE=America/Sao_Paulo
 APP_URL=http://localhost:8000
 
-APP_LOCALE=en
+APP_LOCALE=pt_BR
 APP_FALLBACK_LOCALE=en
 APP_FAKER_LOCALE=en_US
 
 APP_MAINTENANCE_DRIVER=file
-# APP_MAINTENANCE_STORE=database
+
+APP_MAINTENANCE_STORE=database
+
 
 PHP_CLI_SERVER_WORKERS=4
 
@@ -121,7 +124,7 @@ DB_USERNAME=user
 DB_PASSWORD=password
 
 SESSION_DRIVER=redis
-SESSION_LIFETIME=120
+SESSION_LIFETIME=12000000
 SESSION_ENCRYPT=false
 SESSION_PATH=/
 SESSION_DOMAIN=null
@@ -157,6 +160,8 @@ AWS_BUCKET=
 AWS_USE_PATH_STYLE_ENDPOINT=false
 
 VITE_APP_NAME="${APP_NAME}"
+
+
 </code></pre>
     </li>
     <li><strong>Instale as dependências</strong>:
