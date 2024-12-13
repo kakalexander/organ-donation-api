@@ -14,16 +14,8 @@ Route::post('/login', [AuthController::class, 'login']); // Login
 
 // Rotas protegidas (Token Middleware)
 Route::middleware(['App\Http\Middleware\CheckUserToken'])->group(function () {
-    // Rotas do usuário autenticado
-    Route::get('/dashboard', [DashboardController::class, 'getDashboardData']); // Dados do dashboard
- 
-    Route::get('/user', function (\Illuminate\Http\Request $request) {
-        $user = $request->user();
-        if (!$user) {
-            return response()->json(['message' => 'Usuário não autenticado'], 401);
-        }
-        return response()->json($user);
-    });
+    Route::get('/dashboard', [DashboardController::class, 'getDashboardData']);
+    Route::get('/user', fn (\Illuminate\Http\Request $request) => response()->json($request->user()));
 
     // Atualizar último login
     Route::post('/update-last-login', function (\Illuminate\Http\Request $request) {
